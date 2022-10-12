@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -21,16 +22,17 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "É necessário informar o nome.")
     private String nome;
 
-    @NotEmpty
+    @NotEmpty(message = "Sobrenome é obrigatório")
     private String sobrenome;
 
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @NotEmpty
+    @NotEmpty(message = "É necessário informar o cpf.")
+    @CPF
     private String cpf;
 
     @Email

@@ -5,6 +5,7 @@ import io.github.msj.mspessoa.dto.response.PessoaResponseDTO;
 import io.github.msj.mspessoa.model.Pessoa;
 import io.github.msj.mspessoa.repository.PessoaRepository;
 import io.github.msj.mspessoa.service.PessoaService;
+import io.github.msj.mspessoa.service.ValidacaoPessoaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private ValidacaoPessoaService validacaoPessoaService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -40,6 +44,7 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public PessoaResponseDTO salvar(PessoaRequestDTO pessoaRequestDTO) {
+        this.antesDeSalvarValidaPessoa(pessoaRequestDTO);
         Pessoa pessoaRequest = modelMapper.map(pessoaRequestDTO, Pessoa.class);
         Pessoa pessoa = pessoaRepository.save(pessoaRequest);
         PessoaResponseDTO responseDTO = modelMapper.map(pessoa, PessoaResponseDTO.class);
@@ -49,6 +54,7 @@ public class PessoaServiceImpl implements PessoaService {
     @Override
     public PessoaResponseDTO editar(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {
         Optional<Pessoa> pessoaAtual = Optional.of(pessoaRepository.findById(idPessoa)).orElseThrow(() -> new RuntimeException("Teste"));
+        this.antesDeSalvarValidaPessoa(pessoaRequestDTO);
         BeanUtils.copyProperties(pessoaRequestDTO, pessoaAtual.get(), "id");
         Pessoa pessoaRequest = modelMapper.map(pessoaRequestDTO, Pessoa.class);
         Pessoa pessoa = pessoaRepository.save(pessoaRequest);
@@ -60,5 +66,12 @@ public class PessoaServiceImpl implements PessoaService {
     public void deletar(Long idPessoa) {
         Optional<Pessoa> pessoa = Optional.of(pessoaRepository.findById(idPessoa)).orElseThrow(() -> new RuntimeException("Teste"));
         pessoaRepository.delete(pessoa.get());
+    }
+
+    private void antesDeSalvarValidaPessoa(PessoaRequestDTO pessoaRequestDTO) {
+        pessoaRequestDTO.setNome(validacaoPessoaService.validarNome(pessoaRequestDTO.getNome()));
+        pessoaRequestDTO.setSobrenome(validacaoPessoaService.validarSobrenome(pessoaRequestDTO.getSobrenome()));
+        validacaoPessoaService.validarCpfExistente(pessoaRequestDTO.getCpf());
+        validacaoPessoaService.validarDataNascimento(pessoaRequestDTO.getDataNascimento());
     }
 }

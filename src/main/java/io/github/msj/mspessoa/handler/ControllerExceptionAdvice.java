@@ -1,5 +1,9 @@
-package io.github.msj.mspessoa.exception;
+package io.github.msj.mspessoa.handler;
 
+import io.github.msj.mspessoa.exception.MensagemErro;
+import io.github.msj.mspessoa.exception.NegocioException;
+import io.github.msj.mspessoa.exception.RecursoNaoEncontradoException;
+import io.github.msj.mspessoa.exception.ValidacaoErro;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
