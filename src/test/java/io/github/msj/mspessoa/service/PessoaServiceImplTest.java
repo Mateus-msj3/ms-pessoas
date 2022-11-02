@@ -48,7 +48,7 @@ public class PessoaServiceImplTest {
                 .id(null)
                 .nome("pessoa")
                 .sobrenome("teste")
-                .cpf("00011122233")
+                .cpf("000.111.222-33")
                 .dataNascimento(LocalDate.of(1995, Month.OCTOBER, 25))
                 .email("pessoa@email.com")
                 .endereco(Endereco.builder()

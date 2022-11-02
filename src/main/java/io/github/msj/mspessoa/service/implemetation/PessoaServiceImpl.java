@@ -86,6 +86,7 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     public void validarCpfExistente(String cpf) {
+        cpf = cpf.replaceAll("[^\\d ]", "");
         if (pessoaRepository.existsByCpf(cpf)) {
             throw new NegocioException("O cpf informado já está cadastrado");
         }
