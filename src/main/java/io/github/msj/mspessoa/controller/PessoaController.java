@@ -24,7 +24,7 @@ public class PessoaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PessoaResponseDTO> listarPorId(Long id) {
+    public ResponseEntity<PessoaResponseDTO> listarPorId(@PathVariable Long id) {
         PessoaResponseDTO pessoaResponseDTO = pessoaService.listarPorId(id);
         return ResponseEntity.ok().body(pessoaResponseDTO);
     }
@@ -35,7 +35,7 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoaResponseDTO);
     }
 
-    @PostMapping("/editar")
+    @PostMapping("/editar/{idPessoa}")
     public ResponseEntity<PessoaResponseDTO> editar(@PathVariable Long idPessoa, @RequestBody @Valid PessoaRequestDTO pessoaRequestDTO) {
         pessoaRequestDTO.setId(idPessoa);
         PessoaResponseDTO pessoaResponseDTO = pessoaService.editar(idPessoa, pessoaRequestDTO);
