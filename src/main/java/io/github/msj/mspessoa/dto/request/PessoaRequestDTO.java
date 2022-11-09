@@ -30,7 +30,6 @@ public class PessoaRequestDTO {
     private LocalDate dataNascimento;
 
     @NotEmpty(message = "É necessário informar o cpf.")
-    @CPF
     private String cpf;
 
     @Email

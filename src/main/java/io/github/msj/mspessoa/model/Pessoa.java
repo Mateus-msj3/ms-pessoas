@@ -32,7 +32,6 @@ public class Pessoa {
     private LocalDate dataNascimento;
 
     @NotEmpty(message = "É necessário informar o cpf.")
-    @CPF
     private String cpf;
 
     @Email

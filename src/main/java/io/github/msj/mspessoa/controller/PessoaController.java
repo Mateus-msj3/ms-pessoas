@@ -35,7 +35,7 @@ public class PessoaController {
         return ResponseEntity.ok().body(pessoaResponseDTO);
     }
 
-    @PostMapping("/editar/{idPessoa}")
+    @PutMapping("/editar/{idPessoa}")
     public ResponseEntity<PessoaResponseDTO> editar(@PathVariable Long idPessoa, @RequestBody @Valid PessoaRequestDTO pessoaRequestDTO) {
         pessoaRequestDTO.setId(idPessoa);
         PessoaResponseDTO pessoaResponseDTO = pessoaService.editar(idPessoa, pessoaRequestDTO);
