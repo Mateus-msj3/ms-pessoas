@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -26,6 +27,12 @@ public class PessoaController {
     @GetMapping("/{id}")
     public ResponseEntity<PessoaResponseDTO> listarPorId(@PathVariable Long id) {
         PessoaResponseDTO pessoaResponseDTO = pessoaService.listarPorId(id);
+        return ResponseEntity.ok().body(pessoaResponseDTO);
+    }
+
+    @GetMapping("/cpf")
+    public ResponseEntity<PessoaResponseDTO> buscarPorCpf(@RequestParam("cpf") String cpf) {
+        PessoaResponseDTO pessoaResponseDTO = pessoaService.buscarPorCpf(cpf);
         return ResponseEntity.ok().body(pessoaResponseDTO);
     }
 

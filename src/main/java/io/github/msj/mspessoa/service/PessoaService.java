@@ -11,6 +11,8 @@ public interface PessoaService {
 
     PessoaResponseDTO listarPorId(Long id);
 
+    PessoaResponseDTO buscarPorCpf(String cpf);
+
     PessoaResponseDTO salvar(PessoaRequestDTO pessoaRequestDTO);
 
     PessoaResponseDTO editar(Long idPessoa, PessoaRequestDTO pessoaRequestDTO);

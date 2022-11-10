@@ -42,6 +42,18 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
+    public PessoaResponseDTO buscarPorCpf(String cpf) {
+        Optional<Pessoa> pessoa = Optional.of(pessoaRepository.findByCpf(cpf)).orElseThrow(() -> new NegocioException("Pessoa não encontrada"));
+        if (pessoa.isPresent()) {
+            PessoaResponseDTO pessoaResponseDTO = modelMapper.map(pessoa.get(), PessoaResponseDTO.class);
+            return pessoaResponseDTO;
+        }else {
+          return null;
+        }
+
+    }
+
+    @Override
     public PessoaResponseDTO salvar(PessoaRequestDTO pessoaRequestDTO) {
         this.antesDeSalvarValidaPessoa(pessoaRequestDTO);
         Pessoa pessoaRequest = modelMapper.map(pessoaRequestDTO, Pessoa.class);
@@ -85,9 +97,11 @@ public class PessoaServiceImpl implements PessoaService {
         return sobrenome;
     }
 
-    public void validarCpfExistente(String cpf) {
-        cpf = cpf.replaceAll("[^\\d ]", "");
-        if (pessoaRepository.existsByCpf(cpf)) {
+    public void validarCpfExistente(PessoaRequestDTO pessoaRequestDTO) {
+        String cpfFormatado = pessoaRequestDTO.getCpf().replaceAll("[^\\d ]", "");
+        pessoaRequestDTO.setCpf(cpfFormatado);
+
+        if (pessoaRepository.existsByCpf(pessoaRequestDTO.getCpf())) {
             throw new NegocioException("O cpf informado já está cadastrado");
         }
     }
@@ -103,13 +117,13 @@ public class PessoaServiceImpl implements PessoaService {
     private void antesDeSalvarValidaPessoa(PessoaRequestDTO pessoaRequestDTO) {
         this.validarNome(pessoaRequestDTO.getNome());
         this.validarSobrenome(pessoaRequestDTO.getSobrenome());
-        this.validarCpfExistente(pessoaRequestDTO.getCpf());
+        this.validarCpfExistente(pessoaRequestDTO);
         this.validarDataNascimento(pessoaRequestDTO.getDataNascimento());
     }
 
     private void antesDeEditarVerficaCpf(PessoaRequestDTO pessoaRequestDTO, Optional<Pessoa> pessoa) {
         if (!pessoaRequestDTO.getCpf().equals(pessoa.get().getCpf())) {
-            validarCpfExistente(pessoaRequestDTO.getCpf());
+            validarCpfExistente(pessoaRequestDTO);
         }
     }
     private void antesDeEditarValidaPessoa(PessoaRequestDTO pessoaRequestDTO) {
